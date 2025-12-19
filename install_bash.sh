@@ -22,10 +22,9 @@ rcdn() {
     dir=$(command rcd "$@" | head -n1)
     if [ -d "$dir" ]; then
         builtin cd -- "$dir" || return
-        # Open main file if exists
-        for f in main.*; do
-            [ -f "$f" ] && nvim "$f" && break
-        done
+        # Recursively find first main.* file
+        main_file=$(find . -type f -name 'main.*' | head -n1)
+        [ -n "$main_file" ] && nvim "$main_file"
     fi
 }
 '
