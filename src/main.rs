@@ -10,7 +10,6 @@ fn main() {
     rcdn();
 }
 
-// TODO: Better code and expand it by opening main files of different programming langs via slapping ontop another iteration
 // TODO: Let user decide which editor they want to open by asking them and storing the info somewhere
 fn rcdn() {
     let args: Vec<String> = std::env::args().collect();
@@ -64,9 +63,7 @@ fn rcdn() {
     let matches: Vec<String> = Arc::try_unwrap(matches).unwrap().into_inner().unwrap();
 
     if matches.len() == 1 {
-        let (abs, rel) = matches[0].rsplit_once('/').unwrap();
-        let command = format!("{abs} && nvim {rel}");
-        println!("{command}");
+        println!("{}", matches[0]);
     } else if matches.len() > 1 {
         let prompt = "Multiple entries were found. Select one: ";
 
@@ -80,9 +77,7 @@ fn rcdn() {
             .interact()
             .expect("Program shut down unexpectedly");
 
-        let (abs, rel) = selection.rsplit_once('/').unwrap();
-        let command = format!("{abs} && nvim {rel}");
-        println!("{command}");
+        println!("{selection}");
     } else {
         println!("No matches found.");
     }

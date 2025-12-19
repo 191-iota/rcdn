@@ -17,7 +17,18 @@ if ! grep -q '\.cargo/bin' "$HOME/.bashrc" 2>/dev/null; then
 fi
 
 # Add Bash wrapper to cd into the first printed path (idempotent)
-WRAPPER='rcdn() { builtin cd -- "$(command rcd "$@" | head -n1)"; }'
+WRAPPER='
+rcdn() {
+    dir=$(command rcd "$@" | head -n1)
+    if [ -d "$dir" ]; then
+        builtin cd -- "$dir" || return
+        # Open main file if exists
+        for f in main.*; do
+            [ -f "$f" ] && nvim "$f" && break
+        done
+    fi
+}
+'
 if ! grep -Fqx "$WRAPPER" "$HOME/.bashrc" 2>/dev/null; then
   { echo; echo '# rcd shell wrapper'; echo "$WRAPPER"; } >> "$HOME/.bashrc"
 fi
